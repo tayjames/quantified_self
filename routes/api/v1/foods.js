@@ -21,8 +21,13 @@ router.get("/:id", function(req, res, next) {
     }
   })
     .then(food => {
+      if (food) {
       res.setHeader("Content-Type", "application/json");
       res.status(200).send(JSON.stringify(food));
+    } else {
+      res.setHeader('Content-Type', "application/json");
+      res.status(404).send(JSON.stringify("No food found"))
+    }
     })
     .catch(error => {
       res.setHeader("Content-Type", "application/json");
@@ -31,41 +36,56 @@ router.get("/:id", function(req, res, next) {
 });
 
 router.post("/", function(req, res, next) {
-  Food.create({
-    name: req.body.name,
-    calories: req.body.calories
-  })
-  .then(food => {
-    res.setHeader("Content-Type", "application/json");
-    res.status(201).send(JSON.stringify(food));
-  })
-  .catch(error => {
-    res.setHeader("Content-Type", "application/json");
-    res.status(400).send({error});
-  });
-});
-
-router.put("/:id", function(req, res, next) {
-  Food.update(
-    {
+  if (req.body.name && req.body.calories) {
+    Food.create({
       name: req.body.name,
       calories: req.body.calories
-    },
-    {
-      returning: true,
-      where: {
-        id: parseInt(req.params.id)
-      }
-    }
-  )
-    .then(([rowsUpdate, [updatedFood]]) => {
+    })
+    .then(food => {
       res.setHeader("Content-Type", "application/json");
-      res.status(202).send(JSON.stringify(updatedFood));
+      res.status(201).send(JSON.stringify(food));
     })
     .catch(error => {
       res.setHeader("Content-Type", "application/json");
-      res.status(400).send({error});
+      res.status(500).send({error});
     });
+  } else {
+    res.setHeader("Content-Type", "application/json");
+    res.status(400).send(JSON.stringify("Remember to provide both the food name and its calories."))
+  }
+});
+
+router.patch("/:id", function(req, res, next) {
+  if (req.body.name && req.body.calories) {
+    Food.findOne({
+      where: {
+        id: req.params.id
+      }
+    })
+    .then(food => {
+      if (food) {
+        food.update({
+          name: req.body.name,
+          calories: req.body.calories
+        })
+        .then(update => {
+          res.setHeader("Content-Type", "application/json");
+          res.status(202).send(JSON.stringify(update));
+        })
+        .catch(error => {
+          res.setHeader("Content-Type", "application/json");
+          res.status(500).send({error})
+        })
+      }
+    })
+    .catch(error => {
+      res.setHeader("Content-Type", "application/json");
+      res.status(500).send({error})
+    });
+  } else {
+    res.setHeader("Content-Type", "application/json");
+    res.status(400).send(JSON.stringify("Remember to provide both the food name and its calories."))
+  }
 });
 
 router.delete("/:id", function(req, res, next) {
@@ -76,10 +96,11 @@ router.delete("/:id", function(req, res, next) {
   })
   .then(food => {
     if (food) {
-      return food.destroy()
-      .then(comida => {
+      food.destroy()
+      .then(destroy => {
+        console.log(destroy)
         response.setHeader("Content-Type", "application/json");
-        response.status(204).send(JSON.stringify(comida))
+        response.status(204).send(destroy.statusCode)
       })
       .catch(error => {
         response.setHeader("Content-Type", "application/json");
