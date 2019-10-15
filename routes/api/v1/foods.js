@@ -98,7 +98,6 @@ router.delete("/:id", function(req, res, next) {
     if (food) {
       return food.destroy()
       .then(destroy => {
-        console.log(destroy)
         res.setHeader("Content-Type", "application/json");
         res.status(204).send()
       })
