@@ -96,19 +96,19 @@ router.delete("/:id", function(req, res, next) {
   })
   .then(food => {
     if (food) {
-      food.destroy()
+      return food.destroy()
       .then(destroy => {
         console.log(destroy)
-        response.setHeader("Content-Type", "application/json");
-        response.status(204).send(destroy.statusCode)
+        res.setHeader("Content-Type", "application/json");
+        res.status(204).send()
       })
       .catch(error => {
-        response.setHeader("Content-Type", "application/json");
-        response.status(500).send({error});
+        res.setHeader("Content-Type", "application/json");
+        res.status(500).send({error});
       })
     } else {
-      response.setHeader("Content-Type", "application/json");
-      response.status(404).send(JSON.stringify("Food not found!"));
+      res.setHeader("Content-Type", "application/json");
+      res.status(404).send(JSON.stringify("Food not found!"));
     }
   })
 })

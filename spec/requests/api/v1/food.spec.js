@@ -114,7 +114,7 @@ describe('Food API endpoints', () => {
     })
   })
 
-  test('Returns a 400 status code when an invalid id is sent to DELETE /api/v1/foods/:id', async() => {
+  test('Returns a 400 status code when an invalid id is sent to DELETE /api/v1/foods/:id', () => {
       return request(app).delete('/api/v1/foods/12000')
       .then(response => {
         expect(response.statusCode).toBe(404)
