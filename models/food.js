@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Food.associate = function(models) {
     // associations can be defined here
+    this.belongsToMany(models.Meal, {through: models.MealFood, foreignKey: 'FoodId', onDelete: 'CASCADE'})
   };
   return Food;
 };
