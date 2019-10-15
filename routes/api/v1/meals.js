@@ -22,10 +22,10 @@ router.post('/:MealId/foods/:FoodId', async function(req, res, next){
   if (meal && food) {
     let mealfood = await MealFood.findOne( { where: {MealId: meal.id, FoodId: food.id} } )
     if (mealfood) {
-      res.status(400).send(JSON.stringify('Food already in meal.'))
+      res.status(400).send(JSON.stringify("Already exists in meal."))
     } else {
-      await MealFood.create({FoodId: food.id, MealId: meal.id})
-      res.status(201).send(JSON.stringify(`Successfully added ${food.name} to ${meal.name}`))
+            await MealFood.create({FoodId: food.id, MealId: meal.id})
+      res.status(201).send(JSON.stringify(`${food.name} added to ${meal.name}.`))
     }
   } else {
     res.status(404).send(JSON.stringify(food,meal))
@@ -38,6 +38,20 @@ router.get('/', function(req, res, next) {
   .then( meals => res.status(200).send(JSON.stringify(meals)) )
   .catch( error => res.status(204).send({error}) )
 })
+
+router.get('/:MealId/foods', function(req, res, next) {
+  res.setHeader("Content-Type", "application/json")
+  Meal.findOne({
+    where: {
+      id: req.params.MealId
+    },
+    include: [{model: Food, attributes: ["id", "name", "calories"]}]
+  })
+  .then( meals => res.status(200).send(JSON.stringify(meals)) )
+  .catch( error => res.status(204).send({error}) )
+})
+
+
 
 
 module.exports = router
