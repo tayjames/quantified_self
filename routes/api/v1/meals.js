@@ -74,7 +74,7 @@ router.get('/:MealId/foods', function(req, res, next) {
   .catch( error => res.status(204).send({error}))
 })
 
-router.delete('/:MealId/foods/:FoodId', function(req, res, next) => {
+router.delete('/:MealId/foods/:FoodId', async function(req, res, next) {
   res.setHeader("Content-Type", "application/json")
   let food = await Food.findOne( { where: {
                                     id: req.params.FoodId
