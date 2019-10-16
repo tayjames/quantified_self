@@ -31,4 +31,3 @@
 
 ## Schema
 ![Database Schema Diagram](Untitled.png)
-A README contains sections such as Introduction, Initial Setup, How to Use, Known Issues, Running Tests, How to Contribute, Core Contributors, Schema Design, and Tech Stack List.
