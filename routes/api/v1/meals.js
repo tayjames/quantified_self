@@ -11,7 +11,7 @@ router.post('/', function(req, res, next){
         Meal.create({
           name: req.body.name
         })
-        .then(res.status(201).send("Meal Created"))
+        .then(res.status(201).send(JSON.stringify("Meal Created")))
     }
 });
 
@@ -45,7 +45,7 @@ router.post('/:MealId/foods/:FoodId', async function(req, res, next){
         res.status(201).send(JSON.stringify(`${food.name} added to ${meal.name}.`))
       }
   } else {
-    res.status(404).send(JSON.stringify(food,meal))
+
   }
 })
 
